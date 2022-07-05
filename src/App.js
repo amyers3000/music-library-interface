@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Gallary from './Component/Gallary';
 import SearchBar from './Component/SearchBar';
 import { DataContext } from './Context/DataContext'
+import { SearchContext } from './Context/SearchContext'
 
 function App() {
-  let [search, setSearch] = useState('')
+  
   let [message, setMessage] = useState('Search for music')
   let [data, setData] = useState([])
+  let searchInput = useRef('')
 
   const API_URL = 'https://itunes.apple.com/search?term='
   
-  useEffect( () => {
-    if (search){
-      const fetchData = async () => {
-      document.title = `${search} Music`
-      const response = await fetch(API_URL + search)
+  
+
+  const handleSearch = (e, term) => {
+    e.preventDefault()
+    const fetchData = async () => {
+      document.title = `${term} Music`
+      const response = await fetch(API_URL + term)
       const resData = await response.json()
       console.log(resData)
       if (resData.results.length > 0) {
@@ -24,16 +28,15 @@ function App() {
       }
     }
     fetchData()
-    }
-  }, [search])
-
-  const handleSearch = (e, term) => {
-    e.preventDefault()
-    setSearch(term)
   }
   return (
     <div>
-      <SearchBar handleSearch = {handleSearch}/>
+      <SearchContext.Provider value={ {
+        term: searchInput,
+        handleSearch: handleSearch
+      }}>
+      <SearchBar/>
+      </SearchContext.Provider>
       {message}
       <DataContext.Provider value={data}>
       <Gallary/>
