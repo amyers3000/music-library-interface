@@ -1,8 +1,11 @@
 import GallaryItem from "./GallaryItem";
+import { useContext } from 'react'
+import { DataContext } from '../Context/DataContext'
 
-function Gallary(props) {
+function Gallary() {
+    const data = useContext(DataContext)
 
-    const display = props.data.map((item, index) => {
+    const display = data.map((item, index) => {
         return(
             <GallaryItem item={item} key={index}/>
         )
