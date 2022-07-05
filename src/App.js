@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Gallary from './Component/Gallary';
 import SearchBar from './Component/SearchBar';
+import AlbumView from './Component/AlbumView';
+import ArtistView from './Component/ArtistView';
 
 function App() {
   let [search, setSearch] = useState('')
   let [message, setMessage] = useState('Search for music')
   let [data, setData] = useState([])
+
 
   const API_URL = 'https://itunes.apple.com/search?term='
   
@@ -32,10 +36,19 @@ function App() {
   }
   return (
     <div>
-      <SearchBar handleSearch = {handleSearch}/>
       {message}
-      <Gallary data={data}/>
-      
+      <Router>
+        <Routes>
+          <Route path='/' element= {
+            <Fragment>
+              <SearchBar handleSearch = {handleSearch}/>
+              <Gallary data={data}/>
+            </Fragment>
+          }/>
+          <Route path='/album/:id' element={<AlbumView />}/>
+          <Route path='/artist/:id' element={<ArtistView />}/>
+        </Routes>
+      </Router>
     </div>
   );
 }
