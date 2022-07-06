@@ -1,8 +1,8 @@
 import GallaryItem from "./GallaryItem";
 
 function Gallary(props) {
-
-    const display = props.data.map((item, index) => {
+    const data = props.data.result.read()
+    const display = data.map((item, index) => {
         return(
             <GallaryItem item={item} key={index}/>
         )
